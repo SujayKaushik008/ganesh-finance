@@ -33,6 +33,7 @@ public class LoanServiceImpl implements LoanService{
 		List<LoanApplication> result = new ArrayList<LoanApplication>();
 		try {
 			result = loanDao.searchLoanApplicationByDate(start_date, end_date);
+			if(result.size() == 0) throw new ApplicationException()	;
 		} catch (Exception e) {
 			e.printStackTrace();
 			String msg = "No applicaton found";
@@ -46,6 +47,7 @@ public class LoanServiceImpl implements LoanService{
 		List<LoanApplication> result = new ArrayList<LoanApplication>();
 		try {
 			result = loanDao.searchLoanApplicationByNumber(loan_application_number);
+			if(result.size() == 0) throw new ApplicationException()	;
 		} catch (Exception e) {
 			e.printStackTrace();
 			String msg = "No applicaton found";
@@ -59,6 +61,7 @@ public class LoanServiceImpl implements LoanService{
 		List<LoanApplication> result = new ArrayList<LoanApplication>();
 		try {
 			result = loanDao.searchLoanApplicationByType(type_code);
+			if(result.size() == 0) throw new ApplicationException()	;
 		} catch (Exception e) {
 			e.printStackTrace();
 			String msg = "No applicaton found";
