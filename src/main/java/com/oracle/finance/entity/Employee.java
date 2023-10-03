@@ -14,7 +14,7 @@ public class Employee {
 		this.email = email;
 		this.branch_code = branch_code;
 	}
-	
+
 	public Employee() {
 		// TODO Auto-generated constructor stub
 	}
@@ -74,7 +74,7 @@ public class Employee {
 	public void setBranch_code(String branch_code) {
 		this.branch_code = branch_code;
 	}
-	
-	
+
+
 
 }
