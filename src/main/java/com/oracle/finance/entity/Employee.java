@@ -1,9 +1,9 @@
 package com.oracle.finance.entity;
-
+import java.sql.*;
 public class Employee {
-	private String employee_id,employee_first_name,employee_last_name,gender,contact,email,branch_code;
-
-	public Employee(String employee_id, String employee_first_name, String employee_last_name, String gender,
+	private String employee_id,employee_first_name,employee_last_name,contact,email,branch_code;
+	private int gender;
+	public Employee(String employee_id, String employee_first_name, String employee_last_name, int gender,
 			String contact, String email, String branch_code) {
 		super();
 		this.employee_id = employee_id;
@@ -43,11 +43,11 @@ public class Employee {
 		this.employee_last_name = employee_last_name;
 	}
 
-	public String getGender() {
+	public int getGender() {
 		return gender;
 	}
 
-	public void setGender(String gender) {
+	public void setGender(int gender) {
 		this.gender = gender;
 	}
 

@@ -1,13 +1,13 @@
 package com.oracle.finance.entity;
 
 public class Users {
-	private String username,password,role,empcustid;
-	
+	private String username,password,empcustid;
+	private int role;
 	public Users() {
 
 	}
 
-	public Users(String username, String password, String role, String empcustid) {
+	public Users(String username, String password, int role, String empcustid) {
 		super();
 		this.username = username;
 		this.password = password;
@@ -31,11 +31,11 @@ public class Users {
 		this.password = password;
 	}
 
-	public String getRole() {
+	public int getRole() {
 		return role;
 	}
 
-	public void setRole(String role) {
+	public void setRole(int role) {
 		this.role = role;
 	}
 
