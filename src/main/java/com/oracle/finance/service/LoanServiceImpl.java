@@ -1,5 +1,6 @@
 package com.oracle.finance.service;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,8 +29,8 @@ public class LoanServiceImpl implements LoanService{
 	}
 
 	@Override
-	public LoanApplication searchLoanApplicationByDateService(String start_date, String end_date) {
-		LoanApplication result = new LoanApplication();
+	public List<LoanApplication> searchLoanApplicationByDateService(String start_date, String end_date) {
+		List<LoanApplication> result = new ArrayList<LoanApplication>();
 		try {
 			result = loanDao.searchLoanApplicationByDate(start_date, end_date);
 		} catch (Exception e) {
@@ -41,8 +42,8 @@ public class LoanServiceImpl implements LoanService{
 	}
 
 	@Override
-	public LoanApplication searchLoanApplicationByNumberService(String loan_application_number) {
-		LoanApplication result = new LoanApplication();
+	public List<LoanApplication> searchLoanApplicationByNumberService(String loan_application_number) {
+		List<LoanApplication> result = new ArrayList<LoanApplication>();
 		try {
 			result = loanDao.searchLoanApplicationByNumber(loan_application_number);
 		} catch (Exception e) {
@@ -54,8 +55,8 @@ public class LoanServiceImpl implements LoanService{
 	}
 
 	@Override
-	public LoanApplication searchLoanApplicationByTypeService(int type_code) {
-		LoanApplication result = new LoanApplication();
+	public List<LoanApplication> searchLoanApplicationByTypeService(int type_code) {
+		List<LoanApplication> result = new ArrayList<LoanApplication>();
 		try {
 			result = loanDao.searchLoanApplicationByType(type_code);
 		} catch (Exception e) {
@@ -66,5 +67,10 @@ public class LoanServiceImpl implements LoanService{
 		return result;
 	}
 
+@Override
+	public LoanApplication applyLoan(LoanApplication a) {
+		
+		return loanDao.applyLoan(a);
+	}
 
 }

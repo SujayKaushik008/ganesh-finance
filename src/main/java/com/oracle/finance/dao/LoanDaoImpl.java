@@ -7,7 +7,9 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.sql.Date;
 import java.util.List;
+import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -104,7 +106,8 @@ public class LoanDaoImpl implements LoanDao{
 		}
 
 	@Override
-	public LoanApplication searchLoanApplicationByDate(String start_date, String end_date) {
+
+	public List<LoanApplication> searchLoanApplicationByDate(String start_date, String end_date) {
 		System.out.println(start_date);
 		System.out.println(end_date);
 		
@@ -112,14 +115,15 @@ public class LoanDaoImpl implements LoanDao{
 		Date endDate = Date.valueOf(end_date);
 		
 		Connection con = dbConnection.connect();
-		LoanApplication loanApplication = new LoanApplication();
+		List<LoanApplication> result = new ArrayList<>();
 		try {
 			String sql = "select * from loan_application where application_date between ? and ?";
 			PreparedStatement pstmt = con.prepareStatement(sql);
 			pstmt.setDate(1, startDate);
 			pstmt.setDate(2, endDate);
 			ResultSet rs = pstmt.executeQuery();
-			if(rs.next()) {
+			while(rs.next()) {
+				LoanApplication loanApplication = new LoanApplication();
 				loanApplication.setApplication_date(rs.getDate(8));
 				loanApplication.setApplication_status(rs.getInt(7));
 				loanApplication.setClerk_id(rs.getString(2));
@@ -129,10 +133,11 @@ public class LoanDaoImpl implements LoanDao{
 				loanApplication.setLoan_type(rs.getInt(3));
 				loanApplication.setRequested_amount(rs.getFloat(5));
 				loanApplication.setRoi(rs.getFloat(9));
-				
-			}else {
-				throw new ApplicationException();
+				result.add(loanApplication);
 			}
+//			else {
+//				throw new ApplicationException();
+//			}
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
@@ -143,19 +148,21 @@ public class LoanDaoImpl implements LoanDao{
 				e.printStackTrace();
 			}
 		}
-		return loanApplication;
+		return result;
 	}
 
 	@Override
-	public LoanApplication searchLoanApplicationByNumber(String loan_application_number) {
+	public List<LoanApplication> searchLoanApplicationByNumber(String loan_application_number) {
 		Connection con = dbConnection.connect();
-		LoanApplication loanApplication = new LoanApplication();
+		List<LoanApplication> result = new ArrayList<>();
+		
 		try {
 			String sql = "select * from loan_application where loan_application_number =?";
 			PreparedStatement pstmt = con.prepareStatement(sql);
 			pstmt.setString(1, loan_application_number);
 			ResultSet rs = pstmt.executeQuery();
-			if(rs.next()) {
+			while(rs.next()) {
+				LoanApplication loanApplication = new LoanApplication();
 				loanApplication.setApplication_date(rs.getDate(8));
 				loanApplication.setApplication_status(rs.getInt(7));
 				loanApplication.setClerk_id(rs.getString(2));
@@ -165,10 +172,11 @@ public class LoanDaoImpl implements LoanDao{
 				loanApplication.setLoan_type(rs.getInt(3));
 				loanApplication.setRequested_amount(rs.getFloat(5));
 				loanApplication.setRoi(rs.getFloat(9));
-				
-			}else {
-				throw new ApplicationException();
+				result.add(loanApplication);
 			}
+//			else {
+//				throw new ApplicationException();
+//			}
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
@@ -179,19 +187,20 @@ public class LoanDaoImpl implements LoanDao{
 				e.printStackTrace();
 			}
 		}
-		return loanApplication;
+		return result;
 	}
 
 	@Override
-	public LoanApplication searchLoanApplicationByType(int type_code) {
+	public List<LoanApplication> searchLoanApplicationByType(int type_code) {
 		Connection con = dbConnection.connect();
-		LoanApplication loanApplication = new LoanApplication();
+		List<LoanApplication> result = new ArrayList<>();
 		try {
 			String sql = "select * from loan_application where loan_type_code =?";
 			PreparedStatement pstmt = con.prepareStatement(sql);
 			pstmt.setInt(1, type_code);
 			ResultSet rs = pstmt.executeQuery();
-			if(rs.next()) {
+			while(rs.next()) {
+				LoanApplication loanApplication = new LoanApplication();
 				loanApplication.setApplication_date(rs.getDate(8));
 				loanApplication.setApplication_status(rs.getInt(7));
 				loanApplication.setClerk_id(rs.getString(2));
@@ -201,9 +210,7 @@ public class LoanDaoImpl implements LoanDao{
 				loanApplication.setLoan_type(rs.getInt(3));
 				loanApplication.setRequested_amount(rs.getFloat(5));
 				loanApplication.setRoi(rs.getFloat(9));
-				
-			}else {
-				throw new ApplicationException();
+				result.add(loanApplication);
 			}
 		} catch (SQLException e) {
 			e.printStackTrace();
@@ -215,7 +222,47 @@ public class LoanDaoImpl implements LoanDao{
 				e.printStackTrace();
 			}
 		}
-		return loanApplication;
+		return result;
+	}
+	@Override
+	public LoanApplication applyLoan(LoanApplication a) {
+		Connection con=	dbConnection.connect();
+		try {
+			
+			
+			String application_number=UUID.randomUUID().toString();	
+			
+			Date application_date = new Date(System.currentTimeMillis());
+			String query="INSERT INTO LOAN_APPLICATION VALUES(?,?,?,?,?,?,?,?,?)";
+			PreparedStatement ps = con.prepareStatement(query);
+			ps.setString(1,application_number);
+			ps.setString(2,a.getClerk_id());
+			ps.setInt(3,a.getLoan_type());
+			ps.setString(4,a.getCustomer_id());
+			ps.setFloat(5, a.getRequested_amount());
+			ps.setInt(6,a.getLoan_tenure());
+			ps.setInt(7,a.getApplication_status());
+			ps.setDate(8,application_date );
+			ps.setFloat(9,a.getRoi());
+			
+			int res=ps.executeUpdate();
+			System.out.println("sss"+res);
+			a.setApplication_date(application_date);
+			a.setLoan_application_number(application_number);
+			
+		} catch (Exception e) {
+			System.out.println(e);
+		}
+		finally {
+			try {
+				con.close();
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+		
+		return a;
 	}
 
 }
