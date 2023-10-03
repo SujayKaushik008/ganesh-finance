@@ -1,12 +1,12 @@
 package com.oracle.finance.entity;
 
 public class Customer {
-	private String customer_id,customer_first_name,customer_last_name,gender,contact,email,branch_code,aadhar_number,pan_umber;
-
+	private String customer_id,customer_first_name,customer_last_name,contact,email,branch_code,aadhar_number,pan_umber;
+	private int gender;
 	public Customer() {
 		// TODO Auto-generated constructor stub
 	}
-	public Customer(String customer_id, String customer_first_name, String customer_last_name, String gender,
+	public Customer(String customer_id, String customer_first_name, String customer_last_name, int gender,
 			String contact, String email, String branch_code, String aadhar_number, String pan_umber) {
 		super();
 		this.customer_id = customer_id;
@@ -37,10 +37,10 @@ public class Customer {
 	public void setCustomer_last_name(String customer_last_name) {
 		this.customer_last_name = customer_last_name;
 	}
-	public String getGender() {
+	public int getGender() {
 		return gender;
 	}
-	public void setGender(String gender) {
+	public void setGender(int gender) {
 		this.gender = gender;
 	}
 	public String getContact() {
