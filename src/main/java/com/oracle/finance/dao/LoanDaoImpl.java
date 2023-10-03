@@ -5,7 +5,9 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.sql.Date;
 import java.util.List;
+import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -99,5 +101,46 @@ public class LoanDaoImpl implements LoanDao{
 		}
 		return resultList;
 		}
+
+	@Override
+	public LoanApplication applyLoan(LoanApplication a) {
+		Connection con=	dbConnection.connect();
+		try {
+			
+			
+			String application_number=UUID.randomUUID().toString();	
+			
+			Date application_date = new Date(System.currentTimeMillis());
+			String query="INSERT INTO LOAN_APPLICATION VALUES(?,?,?,?,?,?,?,?,?)";
+			PreparedStatement ps = con.prepareStatement(query);
+			ps.setString(1,application_number);
+			ps.setString(2,a.getClerk_id());
+			ps.setInt(3,a.getLoan_type());
+			ps.setString(4,a.getCustomer_id());
+			ps.setFloat(5, a.getRequested_amount());
+			ps.setInt(6,a.getLoan_tenure());
+			ps.setInt(7,a.getApplication_status());
+			ps.setDate(8,application_date );
+			ps.setFloat(9,a.getRoi());
+			
+			int res=ps.executeUpdate();
+			System.out.println("sss"+res);
+			a.setApplication_date(application_date);
+			a.setLoan_application_number(application_number);
+			
+		} catch (Exception e) {
+			System.out.println(e);
+		}
+		finally {
+			try {
+				con.close();
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+		
+		return a;
+	}
 
 }

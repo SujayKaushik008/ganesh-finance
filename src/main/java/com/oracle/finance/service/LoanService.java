@@ -8,4 +8,5 @@ import com.oracle.finance.entity.LoanType;
 public interface LoanService {
 	public List<LoanType> getLoanTypesService();
 	public List<LoanApplication> getAllLoanApplicationService();
+	public LoanApplication applyLoan(LoanApplication a);
 }

@@ -26,4 +26,10 @@ public class LoanServiceImpl implements LoanService{
 		return loanDao.getAllLoanApplication();
 	}
 
+	@Override
+	public LoanApplication applyLoan(LoanApplication a) {
+		
+		return loanDao.applyLoan(a);
+	}
+
 }
