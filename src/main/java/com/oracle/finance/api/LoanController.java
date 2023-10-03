@@ -5,6 +5,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -32,6 +33,21 @@ public class LoanController {
 	@GetMapping("/loanApplication/all")
 	public List<LoanApplication> getAllApplications(){
 		return loanService.getAllLoanApplicationService();
+	}
+	
+	@GetMapping("/loanApplication/date/{start_date}/{end_date}")
+	public LoanApplication searchApplicationByDate(@PathVariable String start_date, @PathVariable String end_date){
+		return loanService.searchLoanApplicationByDateService(start_date,end_date);
+	}
+	
+	@GetMapping("/loanApplication/number/{loan_application_number}")
+	public LoanApplication searchApplicationByNumber(@PathVariable String loan_application_number){
+		return loanService.searchLoanApplicationByNumberService(loan_application_number);
+	}
+	
+	@GetMapping("/loanApplication/type/{type_code}")
+	public LoanApplication searchApplicationByType(@PathVariable int type_code){
+		return loanService.searchLoanApplicationByTypeService(type_code);
 	}
 
 }
