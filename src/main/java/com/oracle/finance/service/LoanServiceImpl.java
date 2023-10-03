@@ -23,8 +23,7 @@ public class LoanServiceImpl implements LoanService{
 
 	@Override
 	public List<LoanApplication> getAllLoanApplicationService() {
-		// TODO Auto-generated method stub
-		return null;
+		return loanDao.getAllLoanApplication();
 	}
 
 }

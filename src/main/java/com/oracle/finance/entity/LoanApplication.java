@@ -3,8 +3,8 @@ package com.oracle.finance.entity;
 import java.sql.Date;
 
 public class LoanApplication {
-	private String loan_application_number,clerk_id,customer_id,loan_tenure;
-	private int loan_type,application_status;
+	private String loan_application_number,clerk_id,customer_id;
+	private int loan_type,application_status,loan_tenure;
 	private Date application_date;
 	private float roi,requested_amount;
 	
@@ -12,7 +12,7 @@ public class LoanApplication {
 		// TODO Auto-generated constructor stub
 	}
 	
-	public LoanApplication(String loan_application_number, String clerk_id, String customer_id, String loan_tenure,
+	public LoanApplication(String loan_application_number, String clerk_id, String customer_id, int loan_tenure,
 			int loan_type, int application_status, float roi, float requested) {
 		super();
 		this.loan_application_number = loan_application_number;
@@ -49,11 +49,11 @@ public class LoanApplication {
 		this.customer_id = customer_id;
 	}
 
-	public String getLoan_tenure() {
+	public int getLoan_tenure() {
 		return loan_tenure;
 	}
 
-	public void setLoan_tenure(String loan_tenure) {
+	public void setLoan_tenure(int loan_tenure) {
 		this.loan_tenure = loan_tenure;
 	}
 

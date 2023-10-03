@@ -57,8 +57,47 @@ public class LoanDaoImpl implements LoanDao{
 
 	@Override
 	public List<LoanApplication> getAllLoanApplication() {
-		// TODO Auto-generated method stub
-		return null;
-	}
+		Connection con=	dbConnection.connect();
+		List<LoanApplication> resultList = new ArrayList<>();
+		try {
+			String sql="select * from loan_application";
+			PreparedStatement pstmt=con.prepareStatement(sql);
+			ResultSet rs= pstmt.executeQuery();
+
+			while( rs.next()) {
+				
+
+				LoanApplication loanApplication = new LoanApplication();
+				
+				loanApplication.setApplication_date(rs.getDate(8));
+				loanApplication.setApplication_status(rs.getInt(7));
+				loanApplication.setClerk_id(rs.getString(2));
+				loanApplication.setCustomer_id(rs.getString(4));
+				loanApplication.setLoan_application_number(rs.getString(1));
+				loanApplication.setLoan_tenure(rs.getInt(6));
+				loanApplication.setLoan_type(rs.getInt(3));
+				loanApplication.setRequested_amount(rs.getFloat(5));
+				loanApplication.setRoi(rs.getFloat(9));
+				
+				
+
+				resultList.add(loanApplication);
+			}
+//			TODO: handle the else appropiately
+//			else {
+//				System.out.println("loan types not found !!!!");
+//			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		finally {
+			try {
+				con.close();
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+		}
+		return resultList;
+		}
 
 }

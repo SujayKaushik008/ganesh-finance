@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.oracle.finance.entity.LoanApplication;
 import com.oracle.finance.entity.LoanType;
 import com.oracle.finance.service.LoanService;
 
@@ -26,6 +27,11 @@ public class LoanController {
 	@GetMapping("/loantype")
 	public List<LoanType> getLoanType(){
 		return loanService.getLoanTypesService();
+	}
+	
+	@GetMapping("/loanApplication/all")
+	public List<LoanApplication> getAllApplications(){
+		return loanService.getAllLoanApplicationService();
 	}
 
 }
