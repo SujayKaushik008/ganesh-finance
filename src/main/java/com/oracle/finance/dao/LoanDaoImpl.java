@@ -10,6 +10,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import com.oracle.finance.entity.LoanApplication;
 import com.oracle.finance.entity.LoanType;
 
 
@@ -52,6 +53,12 @@ public class LoanDaoImpl implements LoanDao{
 			}
 		}
 		return resultList;
+	}
+
+	@Override
+	public List<LoanApplication> getAllLoanApplication() {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 }
