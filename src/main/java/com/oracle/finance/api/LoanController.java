@@ -11,11 +11,8 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-
 import com.oracle.finance.entity.LoanApplication;
 import com.oracle.finance.entity.LoanType;
-import com.oracle.finance.entity.Users;
-import com.oracle.finance.service.AuthenticationService;
 import com.oracle.finance.service.LoanService;
 
 @RestController
@@ -25,8 +22,7 @@ public class LoanController {
 	@Autowired
 	LoanService loanService;
 	
-	@Autowired
-	AuthenticationService authenticationservice;
+	
 	
 	@RequestMapping("/test")
 	public String testApi() {
@@ -63,10 +59,6 @@ public class LoanController {
 	{
 		return loanService.applyLoan(a);
 	}
-	@PostMapping("/login")
-	public Users getUserDetails(@RequestBody Users u)
-	{
-		return authenticationservice.getUserDetails(u);
-	}
+	
 	
 }

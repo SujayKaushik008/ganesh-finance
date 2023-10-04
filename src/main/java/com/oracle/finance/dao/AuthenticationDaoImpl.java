@@ -41,10 +41,18 @@ public class AuthenticationDaoImpl implements AuthenticationDao {
 				throw new ApplicationException("Invalid Credentials");
 			}
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
+			
 			e.printStackTrace();
 		}
+		finally
+		{
+			try {
+				con.close();
+			} catch (SQLException e) {
 				
+				e.printStackTrace();
+			}
+		}
 		
 		return user;
 	}
