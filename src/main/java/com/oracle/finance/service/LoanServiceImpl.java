@@ -7,6 +7,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import com.oracle.finance.dao.LoanDao;
+import com.oracle.finance.entity.ApproveLoanRequest;
+import com.oracle.finance.entity.ApproveLoanResponse;
+import com.oracle.finance.entity.LoanAccount;
 import com.oracle.finance.entity.LoanApplication;
 import com.oracle.finance.entity.LoanType;
 import com.oracle.finance.exception.ApplicationException;
@@ -75,5 +78,31 @@ public class LoanServiceImpl implements LoanService{
 		
 		return loanDao.applyLoan(a);
 	}
+
+@Override
+public ApproveLoanResponse approveLoan(ApproveLoanRequest approveLoanRequest) {
+
+	int ApprovalCode = approveLoanRequest.getApprovalCode()	;
+	ApproveLoanResponse approveLoanResponse = new ApproveLoanResponse()	;
+	approveLoanResponse.setApprovalCode(ApprovalCode);
+	if(ApprovalCode == 1) {
+		LoanAccount loanAccount = new LoanAccount();
+		loanAccount.setCustomer_id(approveLoanRequest.getCustomer_id());
+		loanAccount.setDisbursed_amount(approveLoanRequest.getDisbursed_amount());
+		loanAccount.setEmi(approveLoanRequest.getEmi());
+		loanAccount.setLoan_application_number(approveLoanRequest.getLoan_application_number());
+		loanAccount.setLoan_status(approveLoanRequest.getLoan_status());
+		loanAccount.setLoan_tenure(approveLoanRequest.getLoan_tenure());
+		loanAccount.setLoan_type_code(approveLoanRequest.getLoan_type_code());
+		loanAccount.setManager_id(approveLoanRequest.getManager_id());
+		loanAccount.setRoi(approveLoanRequest.getRoi());
+		loanAccount.setSanctioned_amount(approveLoanRequest.getSanctioned_amount());
+		approveLoanResponse.setLoanAccount(loanDao.approveLoan(loanAccount));
+		
+	}else {
+		loanDao.rejectLoan(approveLoanRequest.getLoan_application_number());
+	}
+	return approveLoanResponse;
+}
 
 }

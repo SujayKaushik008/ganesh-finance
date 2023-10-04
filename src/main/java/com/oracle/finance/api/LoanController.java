@@ -12,6 +12,9 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.oracle.finance.entity.ApproveLoanRequest;
+import com.oracle.finance.entity.ApproveLoanResponse;
+import com.oracle.finance.entity.LoanAccount;
 import com.oracle.finance.entity.LoanApplication;
 import com.oracle.finance.entity.LoanType;
 import com.oracle.finance.entity.Users;
@@ -63,6 +66,18 @@ public class LoanController {
 	{
 		return loanService.applyLoan(a);
 	}
+	
+	@PostMapping("/loanApplication/approve")
+	public ApproveLoanResponse approveLoan(@RequestBody ApproveLoanRequest approveLoanRequest)
+	{
+		System.out.println("entered the api");
+		return loanService.approveLoan(approveLoanRequest);
+	}
+	
+	
+	
+	
+	
 	@PostMapping("/login")
 	public Users getUserDetails(@RequestBody Users u)
 	{

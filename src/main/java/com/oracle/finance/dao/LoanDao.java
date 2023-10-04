@@ -2,6 +2,7 @@ package com.oracle.finance.dao;
 
 import java.util.List;
 
+import com.oracle.finance.entity.LoanAccount;
 import com.oracle.finance.entity.LoanApplication;
 import com.oracle.finance.entity.LoanType;
 
@@ -14,4 +15,6 @@ public interface LoanDao {
 	 public List<LoanApplication> searchLoanApplicationByType(int type_code);
 	 
 	 public LoanApplication applyLoan(LoanApplication a);
+	 public LoanAccount approveLoan(LoanAccount loanAccount);
+	 public void rejectLoan(String loan_application_number);
 }

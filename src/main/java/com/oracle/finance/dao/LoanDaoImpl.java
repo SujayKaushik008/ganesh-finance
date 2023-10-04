@@ -5,15 +5,15 @@ import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.text.SimpleDateFormat;
+
 import java.util.ArrayList;
-import java.sql.Date;
 import java.util.List;
 import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import com.oracle.finance.entity.LoanAccount;
 import com.oracle.finance.entity.LoanApplication;
 import com.oracle.finance.entity.LoanType;
 import com.oracle.finance.exception.ApplicationException;
@@ -257,12 +257,99 @@ public class LoanDaoImpl implements LoanDao{
 			try {
 				con.close();
 			} catch (SQLException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 		}
 		
 		return a;
 	}
+
+	@Override
+	public LoanAccount approveLoan(LoanAccount loanAccount) {
+		Connection con=	dbConnection.connect();
+		try {
+			System.out.println("we have reached point 1");
+			String query0="UPDATE LOAN_APPLICATION SET APPLICATION_STATUS = 1 WHERE LOAN_APPLICATION_NUMBER = ?";
+			PreparedStatement ps0 = con.prepareStatement(query0);
+			ps0.setString(1,loanAccount.getLoan_application_number());
+			
+			System.out.println("we have reached point 2");
+			
+			String accountNumber = UUID.randomUUID().toString();	
+			
+			Date approval_date = new Date(System.currentTimeMillis());
+			String query="INSERT INTO LOAN_ACCOUNT VALUES(?,?,?,?,?,?,?,?,?,?,?,?)";
+			PreparedStatement ps = con.prepareStatement(query);
+			ps.setString(1,accountNumber);
+			ps.setString(2,loanAccount.getCustomer_id());
+			ps.setString(3,loanAccount.getManager_id());
+			ps.setInt(4,loanAccount.getLoan_type_code());
+			ps.setFloat(5, loanAccount.getDisbursed_amount());
+			ps.setDate(6,approval_date);
+			ps.setFloat(7,loanAccount.getSanctioned_amount());
+			ps.setString(8,loanAccount.getLoan_application_number() );
+			ps.setFloat(9,loanAccount.getEmi());
+			ps.setInt(10,loanAccount.getLoan_status());
+			ps.setInt(11,loanAccount.getLoan_tenure() );
+			ps.setFloat(12,loanAccount.getRoi());
+			
+
+			System.out.println("we have reached point 3");
+			
+			String query2="INSERT INTO LOAN_BALANCE VALUES(?,?,?,?,?,?)";
+			PreparedStatement ps2 = con.prepareStatement(query2);
+			ps2.setString(1,accountNumber);
+			ps2.setFloat(2,0f);
+			ps2.setFloat(3,loanAccount.getSanctioned_amount());
+			ps2.setInt(4,loanAccount.getLoan_tenure());
+			ps2.setFloat(5, 0f);
+			ps2.setInt(6,0);
+			
+			int res=ps0.executeUpdate();
+			res=ps.executeUpdate();
+			ps2.executeUpdate();
+			System.out.println("sss"+res);
+			loanAccount.setLoan_account_number(accountNumber);
+			loanAccount.setApproval_date(approval_date);
+			
+		} catch (Exception e) {
+			System.out.println(e);
+		}
+		finally {
+			try {
+				con.close();
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+		}
+		
+		return loanAccount;
+	}
+
+	@Override
+	public void rejectLoan(String loan_application_number) {
+		Connection con=	dbConnection.connect();
+		try {
+			
+			String query="UPDATE LOAN_APPLICATION SET APPLICATION_STATUS = 2 WHERE LOAN_APPLICATION_NUMBER = ?";
+			PreparedStatement ps = con.prepareStatement(query);
+			ps.setString(1,loan_application_number);
+			int res=ps.executeUpdate();
+			System.out.println("sss"+res);
+			
+		} catch (Exception e) {
+			System.out.println(e);
+		}
+		finally {
+			try {
+				con.close();
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+		}
+		
+	}
+	
+	
 
 }
