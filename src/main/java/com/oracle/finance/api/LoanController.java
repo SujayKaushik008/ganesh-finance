@@ -1,6 +1,7 @@
 package com.oracle.finance.api;
 
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -16,6 +17,7 @@ import com.oracle.finance.entity.ApproveLoanRequest;
 import com.oracle.finance.entity.ApproveLoanResponse;
 import com.oracle.finance.entity.LoanAccount;
 import com.oracle.finance.entity.LoanApplication;
+import com.oracle.finance.entity.LoanCancellationRequest;
 import com.oracle.finance.entity.LoanType;
 import com.oracle.finance.service.LoanService;
 
@@ -49,7 +51,7 @@ public class LoanController {
 	}
 	
 	@GetMapping("/loanApplication/number/{loan_application_number}")
-	public List<LoanApplication> searchApplicationByNumber(@PathVariable String loan_application_number){
+	public LoanApplication searchApplicationByNumber(@PathVariable String loan_application_number){
 		return loanService.searchLoanApplicationByNumberService(loan_application_number);
 	}
 	
@@ -72,7 +74,21 @@ public class LoanController {
 		return loanService.approveLoan(approveLoanRequest);
 	}
 	
+	@PostMapping("/loanApplication/cancel")
+	public Map<String, String> cancelLoan(@RequestBody LoanCancellationRequest loanCancellationRequest)
+	{
+		System.out.println("entered the api");
+		return loanService.cancelLoanService(loanCancellationRequest);
+	}
 	
+	@GetMapping("/loanApplication/customer/{customer_id}")
+	public List<LoanApplication> searchApplicationByCustomerId(@PathVariable String customer_id){
+		return loanService.searchLoanApplicationByCustomerIdService(customer_id);
+	}
+	@GetMapping("/loanApplication/branch/{branch_code}")
+	public List<LoanApplication> searchApplicationByBranch(@PathVariable String branch_code){
+		return loanService.searchLoanApplicationByBranchService(branch_code);
+	}
 	
 	
 	
