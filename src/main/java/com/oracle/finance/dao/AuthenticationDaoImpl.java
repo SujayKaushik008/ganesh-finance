@@ -31,8 +31,10 @@ public class AuthenticationDaoImpl implements AuthenticationDao {
 			ps.setString(1, u.getUsername());
 			ps.setString(2, u.getPassword());
 			ResultSet rs=ps.executeQuery();
+			
 			if(rs.next())
 			{
+				
 				
 				loginResponse.setUsername(rs.getString(1));
 				loginResponse.setPassword(rs.getString(2));
@@ -40,6 +42,7 @@ public class AuthenticationDaoImpl implements AuthenticationDao {
 				loginResponse.setRole(rs.getInt(3));
 			}else
 			{
+				System.out.println("poiunt3");
 				throw new ApplicationException("Invalid Credentials");
 			}
 			

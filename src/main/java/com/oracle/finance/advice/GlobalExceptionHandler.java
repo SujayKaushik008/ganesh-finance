@@ -15,26 +15,41 @@ public class GlobalExceptionHandler {
 		ApiError error=new ApiError();
 		String errorMsg = e.getMessage();
 		
-		if(errorMsg == "No applicaton found") {
+		if(errorMsg.equals("No applicaton found")) {
+			error.setError(e.getMessage());
 			error.setStatusCode(404);
-		}else if(errorMsg == "No account found") {
+			return 
+					new ResponseEntity<ApiError>
+			(error, HttpStatusCode.valueOf(404));
+		}else if(errorMsg.equals("No account found")) {
+			error.setError(e.getMessage());
 			error.setStatusCode(404);
-		}else if( errorMsg == "Invalid Credentials"){
-
+			return 
+					new ResponseEntity<ApiError>
+			(error, HttpStatusCode.valueOf(404));
+		}else if( errorMsg.equals("Invalid Credentials")){
+			error.setError(e.getMessage());
 			error.setStatusCode(401);
-		}else if( errorMsg == "Unauthorised"){
-
+			return 
+					new ResponseEntity<ApiError>
+			(error, HttpStatusCode.valueOf(401));
+		}else if( errorMsg.equals("Unauthorised")){
+			error.setError(e.getMessage());
 			error.setStatusCode(401);
+			return 
+					new ResponseEntity<ApiError>
+			(error, HttpStatusCode.valueOf(401));
 		}else {
-
+			error.setError(e.getMessage());
 			error.setStatusCode(500);
+			return 
+					new ResponseEntity<ApiError>
+			(error, HttpStatusCode.valueOf(500));
 		}
 
 
-		error.setError(e.getMessage());
-		return 
-				new ResponseEntity<ApiError>
-		(error, HttpStatusCode.valueOf(404));
+		
+		
 	}
 }
 
