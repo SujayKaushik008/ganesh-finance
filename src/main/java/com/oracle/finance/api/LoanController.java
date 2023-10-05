@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.oracle.finance.entity.ApproveLoanRequest;
 import com.oracle.finance.entity.ApproveLoanResponse;
 import com.oracle.finance.entity.LoanAccount;
+import com.oracle.finance.entity.LoanAccountBalance;
 import com.oracle.finance.entity.LoanAccountRequest;
 import com.oracle.finance.entity.LoanApplication;
 import com.oracle.finance.entity.LoanCancellationRequest;
@@ -94,6 +95,11 @@ public class LoanController {
 	@GetMapping("/loanAccount")
 	public List<LoanAccount> getLoanAccounts(@RequestBody LoanAccountRequest loanAccountRequest){
 		return loanService.getLoanAccount(loanAccountRequest);
+	}
+	
+	@GetMapping("/loanAccount/{loan_account_number}")
+	public LoanAccountBalance getLoanAccountDetails(@PathVariable String loan_account_number){
+		return loanService.getLoanAccountDetails(loan_account_number);
 	}
 	
 	

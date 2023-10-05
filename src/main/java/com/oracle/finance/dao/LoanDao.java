@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Map;
 
 import com.oracle.finance.entity.LoanAccount;
+import com.oracle.finance.entity.LoanAccountBalance;
 import com.oracle.finance.entity.LoanAccountRequest;
 import com.oracle.finance.entity.LoanApplication;
 import com.oracle.finance.entity.LoanCancellationRequest;
@@ -20,7 +21,7 @@ public interface LoanDao {
 	 public List<LoanApplication> searchLoanApplicationByBranch(String branch_code);
 	 public List<LoanAccount> getLoanAccountsByCustomerId(String customer_id);
 	 public List<LoanAccount> getLoanAccountsByBranch(String branch_code);
-	 
+	 public LoanAccountBalance getLoanAccountDetails(String loan_account_number);
 	 public LoanApplication applyLoan(LoanApplication a);
 	 public LoanAccount approveLoan(LoanAccount loanAccount);
 	 public void rejectLoan(String loan_application_number);

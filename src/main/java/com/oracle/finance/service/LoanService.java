@@ -6,6 +6,7 @@ import java.util.Map;
 import com.oracle.finance.entity.ApproveLoanRequest;
 import com.oracle.finance.entity.ApproveLoanResponse;
 import com.oracle.finance.entity.LoanAccount;
+import com.oracle.finance.entity.LoanAccountBalance;
 import com.oracle.finance.entity.LoanAccountRequest;
 import com.oracle.finance.entity.LoanApplication;
 import com.oracle.finance.entity.LoanCancellationRequest;
@@ -20,6 +21,7 @@ public interface LoanService {
 	public List<LoanApplication> searchLoanApplicationByCustomerIdService(String customer_id);
 	public List<LoanApplication> searchLoanApplicationByBranchService(String Branch_code);
 	public List<LoanAccount> getLoanAccount(LoanAccountRequest loanAccountRequest);
+	public LoanAccountBalance getLoanAccountDetails(String loan_account_number);
 	public LoanApplication applyLoan(LoanApplication a);
 	public ApproveLoanResponse approveLoan(ApproveLoanRequest approveLoanRequest);
 	public Map<String,String> cancelLoanService(LoanCancellationRequest loanCancellationRequest);

@@ -17,6 +17,8 @@ public class GlobalExceptionHandler {
 		
 		if(errorMsg == "No applicaton found") {
 			error.setStatusCode(404);
+		}else if(errorMsg == "No account found") {
+			error.setStatusCode(404);
 		}else if( errorMsg == "Invalid Credentials"){
 
 			error.setStatusCode(401);
