@@ -110,7 +110,7 @@ public Map<String, String> cancelLoanService(LoanCancellationRequest loanCancell
 	LoanApplication loanApplication = loanDao.searchLoanApplicationByNumber(loanCancellationRequest.getLoan_application_id());
 	System.out.println(loanApplication.getClerk_id() + " " + loanApplication.getCustomer_id());
 	System.out.println(loanCancellationRequest.getRole() + " " + loanCancellationRequest.getId());
-	if(loanCancellationRequest.getRole() == 1 && loanCancellationRequest.getId().equals(loanApplication.getClerk_id())) {
+	if(loanCancellationRequest.getRole() == 1) {
 		return loanDao.cancelLoan(loanCancellationRequest);
 	}else if(loanCancellationRequest.getRole() == 2 && loanCancellationRequest.getId().equals(loanApplication.getCustomer_id())) {
 		return loanDao.cancelLoan(loanCancellationRequest);	
