@@ -112,11 +112,11 @@ public class LoanDaoImpl implements LoanDao{
 
 	public List<LoanApplication> searchLoanApplicationByDate(String start_date, String end_date) {
 		System.out.println(start_date);
-		System.out.println(end_date);
+		System.out.println(end_date); 
 		
 		Date startDate = Date.valueOf(start_date);
 		Date endDate = Date.valueOf(end_date);
-		
+		 
 		Connection con = dbConnection.connect();
 		List<LoanApplication> result = new ArrayList<>();
 		try {
@@ -447,6 +447,84 @@ public class LoanDaoImpl implements LoanDao{
 		}
 		return result;
 	}
+
+	@Override
+	public List<LoanAccount> getLoanAccountsByCustomerId(String customer_id) {
+		Connection con = dbConnection.connect();
+		List<LoanAccount> result = new ArrayList<>();
+		try {
+			String sql = "select * from loan_account where customer_id=?";
+			PreparedStatement pstmt = con.prepareStatement(sql);
+			pstmt.setString(1, customer_id);
+			ResultSet rs = pstmt.executeQuery();
+			while(rs.next()) {
+				LoanAccount loanAccount = new LoanAccount();
+				loanAccount.setLoan_account_number(rs.getString(1));
+				loanAccount.setApproval_date(rs.getDate(6));
+				loanAccount.setCustomer_id(rs.getString(2));
+				loanAccount.setDisbursed_amount(rs.getFloat(5));
+				loanAccount.setEmi(rs.getFloat(9));
+				loanAccount.setLoan_application_number(rs.getString(8));
+				loanAccount.setLoan_status(rs.getInt(10));
+				loanAccount.setLoan_tenure(rs.getInt(11));
+				loanAccount.setLoan_type_code(rs.getInt(4));
+				loanAccount.setManager_id(rs.getString(3));
+				loanAccount.setRoi(rs.getFloat(12));
+				loanAccount.setSanctioned_amount(rs.getFloat(7));
+			
+				result.add(loanAccount);
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		finally {
+			try {
+				con.close();
+			} catch (SQLException e) {	
+				e.printStackTrace();
+			}
+		}
+		return result;	
+		}
+
+	@Override
+	public List<LoanAccount> getLoanAccountsByBranch(String branch_code) {
+		Connection con = dbConnection.connect();
+		List<LoanAccount> result = new ArrayList<>();
+		try {
+			String sql = "select * from loan_account join customer on(loan_account.customer_id = customer.customer_id) where customer.branch_code=?";
+			PreparedStatement pstmt = con.prepareStatement(sql);
+			pstmt.setString(1, branch_code);
+			ResultSet rs = pstmt.executeQuery();
+			while(rs.next()) {
+				LoanAccount loanAccount = new LoanAccount();
+				loanAccount.setLoan_account_number(rs.getString(1));
+				loanAccount.setApproval_date(rs.getDate(6));
+				loanAccount.setCustomer_id(rs.getString(2));
+				loanAccount.setDisbursed_amount(rs.getFloat(5));
+				loanAccount.setEmi(rs.getFloat(9));
+				loanAccount.setLoan_application_number(rs.getString(8));
+				loanAccount.setLoan_status(rs.getInt(10));
+				loanAccount.setLoan_tenure(rs.getInt(11));
+				loanAccount.setLoan_type_code(rs.getInt(4));
+				loanAccount.setManager_id(rs.getString(3));
+				loanAccount.setRoi(rs.getFloat(12));
+				loanAccount.setSanctioned_amount(rs.getFloat(7));
+			
+				result.add(loanAccount);
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		finally {
+			try {
+				con.close();
+			} catch (SQLException e) {	
+				e.printStackTrace();
+			}
+		}
+		return result;	
+		}
 	
 	
 

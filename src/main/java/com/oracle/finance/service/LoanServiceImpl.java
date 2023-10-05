@@ -11,6 +11,7 @@ import com.oracle.finance.dao.LoanDao;
 import com.oracle.finance.entity.ApproveLoanRequest;
 import com.oracle.finance.entity.ApproveLoanResponse;
 import com.oracle.finance.entity.LoanAccount;
+import com.oracle.finance.entity.LoanAccountRequest;
 import com.oracle.finance.entity.LoanApplication;
 import com.oracle.finance.entity.LoanCancellationRequest;
 import com.oracle.finance.entity.LoanType;
@@ -144,6 +145,15 @@ public List<LoanApplication> searchLoanApplicationByBranchService(String Branch_
 		throw new ApplicationException(msg);
 	}
 	return result;
+}
+
+@Override
+public List<LoanAccount> getLoanAccount(LoanAccountRequest loanAccountRequest) {
+	if(loanAccountRequest.getRole() == 2) {
+		return loanDao.getLoanAccountsByCustomerId(loanAccountRequest.getId());
+	}else {
+		return loanDao.getLoanAccountsByBranch(loanAccountRequest.getBranch_code());
+	}
 }
 
 }
