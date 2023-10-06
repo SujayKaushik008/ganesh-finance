@@ -519,7 +519,7 @@ public class LoanDaoImpl implements LoanDao{
 		}
 		finally {
 			try {
-				con.close();
+				con.close(); 
 			} catch (SQLException e) {	
 				e.printStackTrace();
 			}
