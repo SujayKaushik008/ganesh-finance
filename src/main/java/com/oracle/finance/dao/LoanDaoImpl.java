@@ -20,6 +20,7 @@ import com.oracle.finance.entity.LoanAccountBalance;
 import com.oracle.finance.entity.LoanApplication;
 import com.oracle.finance.entity.LoanCancellationRequest;
 import com.oracle.finance.entity.LoanType;
+import com.oracle.finance.entity.Transaction;
 import com.oracle.finance.exception.ApplicationException;
 
 
@@ -569,6 +570,36 @@ public class LoanDaoImpl implements LoanDao{
 			}
 		}
 		return result;		
+	}
+
+	@Override
+	public List<Transaction> getLoanAccountTransaction(String loan_account_number) {
+		Connection con = dbConnection.connect();
+		List<Transaction> result = new ArrayList<>();
+		try {
+			String sql = "select * from transaction  where loan_account_number =?";
+			PreparedStatement pstmt = con.prepareStatement(sql);
+			pstmt.setString(1, loan_account_number);
+			ResultSet rs = pstmt.executeQuery();
+			while(rs.next()) {
+				Transaction transaction = new Transaction();
+				transaction.setDate_of_transaction(rs.getDate(4));
+				transaction.setLoan_account_number(rs.getString(3));
+				transaction.setTransaction_amount(rs.getFloat(2));
+				transaction.setTransaction_id(rs.getString(1));
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		finally {
+			try {
+				con.close();
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+		}
+		return result;		
+		
 	}
 
 

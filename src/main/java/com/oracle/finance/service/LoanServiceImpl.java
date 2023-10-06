@@ -16,6 +16,7 @@ import com.oracle.finance.entity.LoanAccountRequest;
 import com.oracle.finance.entity.LoanApplication;
 import com.oracle.finance.entity.LoanCancellationRequest;
 import com.oracle.finance.entity.LoanType;
+import com.oracle.finance.entity.Transaction;
 import com.oracle.finance.exception.ApplicationException;
 
 @Component
@@ -160,6 +161,11 @@ public List<LoanAccount> getLoanAccount(LoanAccountRequest loanAccountRequest) {
 @Override
 public LoanAccountBalance getLoanAccountDetails(String loan_account_number) {
 	return loanDao.getLoanAccountDetails(loan_account_number);
+}
+
+@Override
+public List<Transaction> getLoanAccountTransactionService(String loan_account_number) {
+	return loanDao.getLoanAccountTransaction(loan_account_number);
 }
 
 }

@@ -9,6 +9,7 @@ import com.oracle.finance.entity.LoanAccountRequest;
 import com.oracle.finance.entity.LoanApplication;
 import com.oracle.finance.entity.LoanCancellationRequest;
 import com.oracle.finance.entity.LoanType;
+import com.oracle.finance.entity.Transaction;
 
 public interface LoanDao {
 	 public List<LoanType> getLoanTypes();
@@ -26,4 +27,5 @@ public interface LoanDao {
 	 public LoanAccount approveLoan(LoanAccount loanAccount);
 	 public void rejectLoan(String loan_application_number);
 	 public Map<String,String> cancelLoan(LoanCancellationRequest loanCancellationRequest);
+	 public List<Transaction> getLoanAccountTransaction(String loan_account_number);
 }

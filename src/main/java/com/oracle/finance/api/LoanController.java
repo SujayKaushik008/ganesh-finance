@@ -21,6 +21,7 @@ import com.oracle.finance.entity.LoanAccountRequest;
 import com.oracle.finance.entity.LoanApplication;
 import com.oracle.finance.entity.LoanCancellationRequest;
 import com.oracle.finance.entity.LoanType;
+import com.oracle.finance.entity.Transaction;
 import com.oracle.finance.service.LoanService;
 
 @RestController
@@ -102,6 +103,10 @@ public class LoanController {
 		return loanService.getLoanAccountDetails(loan_account_number);
 	}
 	
+	@GetMapping("/transaction/{loan_account_number}")
+	public List<Transaction> getLoanAccountTransaction(@PathVariable String loan_account_number){
+		return loanService.getLoanAccountTransactionService(loan_account_number);
+	}
 	
 	
 	

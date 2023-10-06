@@ -11,6 +11,7 @@ import com.oracle.finance.entity.LoanAccountRequest;
 import com.oracle.finance.entity.LoanApplication;
 import com.oracle.finance.entity.LoanCancellationRequest;
 import com.oracle.finance.entity.LoanType;
+import com.oracle.finance.entity.Transaction;
 
 public interface LoanService {
 	public List<LoanType> getLoanTypesService();
@@ -25,4 +26,5 @@ public interface LoanService {
 	public LoanApplication applyLoan(LoanApplication a);
 	public ApproveLoanResponse approveLoan(ApproveLoanRequest approveLoanRequest);
 	public Map<String,String> cancelLoanService(LoanCancellationRequest loanCancellationRequest);
+	public List<Transaction> getLoanAccountTransactionService(String loan_account_number);
 }
