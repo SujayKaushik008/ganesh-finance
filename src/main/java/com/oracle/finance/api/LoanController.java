@@ -91,8 +91,8 @@ public class LoanController {
 	public List<LoanApplication> searchApplicationByBranch(@PathVariable String branch_code){
 		return loanService.searchLoanApplicationByBranchService(branch_code);
 	}
-	
-	@GetMapping("/loanAccount")
+	 
+	@PostMapping("/loanAccount")
 	public List<LoanAccount> getLoanAccounts(@RequestBody LoanAccountRequest loanAccountRequest){
 		return loanService.getLoanAccount(loanAccountRequest);
 	}
