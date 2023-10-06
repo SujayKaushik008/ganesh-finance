@@ -5,7 +5,7 @@ import java.sql.Date;
 public class Transaction {
 	private String transaction_id,loan_account_number;
 	private float transaction_amount;
-	private Date date_of_transaction;
+	private Date date_of_transaction; 
 	public Transaction(String transaction_id, String loan_account_number, float transaction_amount,
 			Date date_of_transaction) {
 		super();

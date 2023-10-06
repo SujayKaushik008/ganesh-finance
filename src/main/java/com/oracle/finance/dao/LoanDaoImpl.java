@@ -587,6 +587,8 @@ public class LoanDaoImpl implements LoanDao{
 				transaction.setLoan_account_number(rs.getString(3));
 				transaction.setTransaction_amount(rs.getFloat(2));
 				transaction.setTransaction_id(rs.getString(1));
+				result.add(transaction);
+				System.out.println(transaction.getTransaction_id());
 			}
 		} catch (SQLException e) {
 			e.printStackTrace();
