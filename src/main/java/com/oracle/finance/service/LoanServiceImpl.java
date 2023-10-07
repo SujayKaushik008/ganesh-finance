@@ -6,6 +6,7 @@ import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.oracle.finance.dao.LoanDao;
 import com.oracle.finance.entity.ApproveLoanRequest;
@@ -16,6 +17,7 @@ import com.oracle.finance.entity.LoanAccountRequest;
 import com.oracle.finance.entity.LoanApplication;
 import com.oracle.finance.entity.LoanCancellationRequest;
 import com.oracle.finance.entity.LoanType;
+import com.oracle.finance.entity.LoanapplicationDocument;
 import com.oracle.finance.entity.Transaction;
 import com.oracle.finance.exception.ApplicationException;
 
@@ -71,6 +73,7 @@ public class LoanServiceImpl implements LoanService{
 
 @Override
 	public LoanApplication applyLoan(LoanApplication a) {
+		
 		
 		return loanDao.applyLoan(a);
 	}
@@ -166,6 +169,18 @@ public LoanAccountBalance getLoanAccountDetails(String loan_account_number) {
 @Override
 public List<Transaction> getLoanAccountTransactionService(String loan_account_number) {
 	return loanDao.getLoanAccountTransaction(loan_account_number);
+}
+
+@Override
+public LoanApplication applyloan2(MultipartFile file, String aadhar,String clerk_id, String customerid, int loantype,
+		int applicationstatus, int loantenure, float roi, float requestedamount) {
+	return loanDao.applyLoan2(file,aadhar,clerk_id,customerid,loantype,applicationstatus,loantenure,roi,requestedamount);
+}
+
+@Override
+public LoanapplicationDocument searchLoanApplicationByNumberService2(String loan_application_number) {
+	return loanDao.searchLoanApplicationByNumber2(loan_application_number);
+	
 }
 
 }

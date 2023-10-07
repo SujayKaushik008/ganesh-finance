@@ -1,9 +1,12 @@
 package com.oracle.finance.api;
 
+
+
 import java.util.List;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.ByteArrayResource;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 
@@ -11,8 +14,11 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 
+import com.oracle.finance.dao.DBConnection;
 import com.oracle.finance.entity.ApproveLoanRequest;
 import com.oracle.finance.entity.ApproveLoanResponse;
 import com.oracle.finance.entity.LoanAccount;
@@ -21,8 +27,12 @@ import com.oracle.finance.entity.LoanAccountRequest;
 import com.oracle.finance.entity.LoanApplication;
 import com.oracle.finance.entity.LoanCancellationRequest;
 import com.oracle.finance.entity.LoanType;
+import com.oracle.finance.entity.LoanapplicationDocument;
 import com.oracle.finance.entity.Transaction;
+import com.oracle.finance.exception.ApplicationException;
 import com.oracle.finance.service.LoanService;
+
+import jakarta.servlet.http.HttpServletResponse;
 
 @RestController
 @CrossOrigin
@@ -32,6 +42,9 @@ public class LoanController {
 	LoanService loanService;
 	
 	
+	
+	@Autowired
+	DBConnection dbConnection;
 	
 	@RequestMapping("/test")
 	public String testApi() {
@@ -55,8 +68,12 @@ public class LoanController {
 	
 	@GetMapping("/loanApplication/number/{loan_application_number}")
 	public LoanApplication searchApplicationByNumber(@PathVariable String loan_application_number){
-		return loanService.searchLoanApplicationByNumberService(loan_application_number);
+		 return loanService.searchLoanApplicationByNumberService(loan_application_number);
 	}
+	
+	
+	
+	
 	
 	@GetMapping("/loanApplication/type/{type_code}")
 	public List<LoanApplication> searchApplicationByType(@PathVariable int type_code){
@@ -64,9 +81,14 @@ public class LoanController {
 	}
 
 	@PostMapping("/loanApplication/apply")
-	public LoanApplication applyLoan(@RequestBody LoanApplication a)
+	public LoanApplication applyLoan(@RequestParam("file") MultipartFile file,@RequestParam("type1") String aadhar,@RequestParam("clerk_id") String clerk_id,
+            @RequestParam("customerid") String customerid,@RequestParam("loantype") int loantype,@RequestParam("applicationstatus") int applicationstatus,@RequestParam("loantenure") int loantenure,
+            @RequestParam("roi") float roi,@RequestParam("requestedamount") float requestedamount)
 	{
-		return loanService.applyLoan(a);
+		
+		
+		return loanService.applyloan2(file,aadhar,clerk_id,customerid,loantype,applicationstatus,loantenure,roi,requestedamount);
+		//return loanService.applyLoan(a);
 	}
 	
 
@@ -109,7 +131,14 @@ public class LoanController {
 	}
 	
 	
-	
+	//document geting api
+		@GetMapping("/loanApplication/number1/{loan_application_number}")
+		public LoanapplicationDocument searchApplicationByNumber2(@PathVariable String loan_application_number){
+			return loanService.searchLoanApplicationByNumberService2(loan_application_number);
+		}
+			
+			
+		
 	
 	
 }
