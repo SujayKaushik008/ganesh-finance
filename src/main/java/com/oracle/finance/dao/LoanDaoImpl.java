@@ -13,7 +13,11 @@ import java.util.Map;
 import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.ByteArrayResource;
 import org.springframework.stereotype.Component;
+import org.springframework.web.multipart.MultipartFile;
+
+import com.oracle.finance.entity.LoanapplicationDocument;
 
 import com.oracle.finance.entity.LoanAccount;
 import com.oracle.finance.entity.LoanAccountBalance;
@@ -23,6 +27,8 @@ import com.oracle.finance.entity.LoanType;
 import com.oracle.finance.entity.Transaction;
 import com.oracle.finance.exception.ApplicationException;
 
+import javax.sql.rowset.serial.SerialBlob;
+import org.springframework.web.multipart.MultipartFile;
 
 @Component
 public class LoanDaoImpl implements LoanDao{
@@ -176,10 +182,18 @@ public class LoanDaoImpl implements LoanDao{
 				loanApplication.setLoan_type(rs.getInt(3));
 				loanApplication.setRequested_amount(rs.getFloat(5));
 				loanApplication.setRoi(rs.getFloat(9));
+				
+				//getting the document
+				
+				
 			}
 			else {
 				throw new ApplicationException("No applicaton found");
 			}
+			
+			
+			 
+			
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
@@ -190,6 +204,7 @@ public class LoanDaoImpl implements LoanDao{
 				e.printStackTrace();
 			}
 		}
+		
 		return loanApplication;
 	}
 
@@ -252,7 +267,7 @@ public class LoanDaoImpl implements LoanDao{
 			System.out.println("sss"+res);
 			a.setApplication_date(application_date);
 			a.setLoan_application_number(application_number);
-
+			
 		} catch (Exception e) {
 			System.out.println(e);
 		}
@@ -601,6 +616,120 @@ public class LoanDaoImpl implements LoanDao{
 			}
 		}
 		return result;		
+		
+	}
+
+	@Override
+	public LoanApplication applyLoan2(MultipartFile file,String aadhar, String clerk_id, String customerid, int loantype,
+			int applicationstatus, int loantenure, float roi, float requestedamount) {
+		Connection con=	dbConnection.connect();
+		try {
+
+
+			String application_number=UUID.randomUUID().toString();	
+
+			Date application_date = new Date(System.currentTimeMillis());
+			String query="INSERT INTO LOAN_APPLICATION VALUES(?,?,?,?,?,?,?,?,?)";
+			PreparedStatement ps = con.prepareStatement(query);
+			ps.setString(1,application_number);
+			ps.setString(2,clerk_id);
+			ps.setInt(3,loantype);
+			ps.setString(4,customerid);
+			ps.setFloat(5, requestedamount);
+			ps.setInt(6,loantenure);
+			ps.setInt(7,applicationstatus);
+			ps.setDate(8,application_date );
+			ps.setFloat(9,roi);
+
+			int res=ps.executeUpdate();
+			System.out.println("sss"+res);
+//			a.setApplication_date(application_date);
+//			a.setLoan_application_number(application_number);
+			//docuemnt upload
+			String sql="INSERT INTO DOCUMENT VALUES(?,?,?,?)";
+			PreparedStatement ps1=con.prepareStatement(sql);
+			ps1.setString(1,customerid);
+			ps1.setString(2,application_number);			
+			ps1.setBytes(3,file.getBytes());
+			ps1.setString(4, aadhar);
+			ps1.executeUpdate();
+			
+
+		} catch (Exception e) {
+			System.out.println("sai"+e);
+		}
+		finally {
+			try {
+				con.close();
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+		}
+
+		return null;
+	}
+
+	@Override
+	public LoanapplicationDocument searchLoanApplicationByNumber2(String loan_application_number) {
+
+		Connection con = dbConnection.connect();
+		
+//		 response.setContentType("application/json");
+//		 response.setHeader("Content-Disposition", "attachment; filename=aadhar.pdf");
+		LoanapplicationDocument loanApplication=new LoanapplicationDocument();
+		try {
+			String sql = "select * from loan_application where loan_application_number =?";
+			PreparedStatement pstmt = con.prepareStatement(sql);
+			pstmt.setString(1, loan_application_number);
+			ResultSet rs = pstmt.executeQuery();
+			if(rs.next()) {
+				loanApplication.setApplication_date(rs.getDate(8));
+				loanApplication.setApplication_status(rs.getInt(7));
+				loanApplication.setClerk_id(rs.getString(2));
+				loanApplication.setCustomer_id(rs.getString(4));
+				loanApplication.setLoan_application_number(rs.getString(1));
+				loanApplication.setLoan_tenure(rs.getInt(6));
+				loanApplication.setLoan_type(rs.getInt(3));
+				loanApplication.setRequested_amount(rs.getFloat(5));
+				loanApplication.setRoi(rs.getFloat(9));
+				
+				
+				
+				//getting the document
+				
+				sql="SELECT * FROM DOCUMENT WHERE loan_application_number=?";
+				PreparedStatement pstmt2 = con.prepareStatement(sql);
+				pstmt2.setString(1, loan_application_number);
+				ResultSet rs1 = pstmt2.executeQuery();
+				rs1.next();
+				
+				
+				
+				loanApplication.setFileName(rs1.getString(4));
+				loanApplication.setContentType("text/plain");
+				loanApplication.setFileBytes(rs1.getBytes(3));
+				System.out.println(rs1.getBytes(3));
+
+			}
+			else {
+				throw new ApplicationException("No applicaton found");
+			}
+			
+			
+			 
+			
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		finally {
+			try {
+				con.close();
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+		}
+		
+		return loanApplication;
 		
 	}
 

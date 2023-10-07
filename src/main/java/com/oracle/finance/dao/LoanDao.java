@@ -3,12 +3,15 @@ package com.oracle.finance.dao;
 import java.util.List;
 import java.util.Map;
 
+import org.springframework.web.multipart.MultipartFile;
+
 import com.oracle.finance.entity.LoanAccount;
 import com.oracle.finance.entity.LoanAccountBalance;
 import com.oracle.finance.entity.LoanAccountRequest;
 import com.oracle.finance.entity.LoanApplication;
 import com.oracle.finance.entity.LoanCancellationRequest;
 import com.oracle.finance.entity.LoanType;
+import com.oracle.finance.entity.LoanapplicationDocument;
 import com.oracle.finance.entity.Transaction;
 
 public interface LoanDao {
@@ -28,4 +31,7 @@ public interface LoanDao {
 	 public void rejectLoan(String loan_application_number);
 	 public Map<String,String> cancelLoan(LoanCancellationRequest loanCancellationRequest);
 	 public List<Transaction> getLoanAccountTransaction(String loan_account_number);
+	public LoanApplication applyLoan2(MultipartFile file, String clerk_id, String customerid, String customerid2, int loantype,
+			int applicationstatus, int loantenure, float roi, float requestedamount);
+	public LoanapplicationDocument searchLoanApplicationByNumber2(String loan_application_number);
 }
