@@ -2,7 +2,10 @@ package com.oracle.finance;
 
 import java.sql.Date;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+
 import static org.mockito.Mockito.when;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
@@ -12,9 +15,12 @@ import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 
+import com.oracle.finance.entity.ApproveLoanRequest;
+import com.oracle.finance.entity.ApproveLoanResponse;
 import com.oracle.finance.entity.LoanAccount;
 import com.oracle.finance.entity.LoanAccountRequest;
 import com.oracle.finance.entity.LoanApplication;
+import com.oracle.finance.entity.LoanCancellationRequest;
 import com.oracle.finance.service.LoanService;
 
 @SpringBootTest
@@ -48,6 +54,16 @@ class GaneshFinanceApplicationTests {
 	// Instance 3
 	LoanAccount loanAccount3 = new LoanAccount("LA345678901", "Customer003", "Manager003", "LA345678", 3, 100000.0f, 100000.0f, 5000.0f, 6.0f, new Date(System.currentTimeMillis()));
 
+	
+	
+	//Instance 1
+	ApproveLoanRequest request1=new ApproveLoanRequest(0,1,"Customer001","Manager001","LA123456",1,1,36,50000.0f,50000.0f,1589.0f,9.0f);
+	
+	//Instance 2
+	ApproveLoanRequest request2=new ApproveLoanRequest(0,0,"Customer002","Manager001","LA345678",1,1,48,50000.0f,50000.0f,1244.0f,9.0f);
+	
+	//Instance 1
+	LoanCancellationRequest cancelrequest1= new LoanCancellationRequest("customer001","LA123456",2);
 
 	List<LoanApplication> loanApps = new ArrayList<LoanApplication>();
 	List<LoanAccount> loanAccounts = new ArrayList<LoanAccount>();
@@ -106,5 +122,39 @@ class GaneshFinanceApplicationTests {
 		assertEquals(actualResult1.size(), loanAccounts.size());
 		assertEquals(actualResult2.size(), loanAccounts1.size());
 	}
+	
+	
+	//testing for approval of loan
+	@Test
+	void loanApproveTest()
+	{
+		ApproveLoanResponse response1=new ApproveLoanResponse(1,"customer1@gmail.com","customer1","LA123456",loanAccount1);
+		ApproveLoanResponse response2=new ApproveLoanResponse(0,"customer2@gmail.com","customer2","LA345678",null);
+		
+		when(loanService.approveLoan(request1)).thenReturn(response1);
+		when(loanService.approveLoan(request2)).thenReturn(response2);
+		
+		ApproveLoanResponse actualresponse1=loanService.approveLoan(request1);
+		ApproveLoanResponse actualresponse2=loanService.approveLoan(request2);
+		
+		assertEquals(actualresponse1,response1);
 
+		assertEquals(actualresponse2,response2);
+	}
+	
+	
+	@Test
+	void cancelLoanTest()
+	{
+		Map<String, String> cancelresponse1= new HashMap<>();
+		cancelresponse1.put("result", "success");
+		
+		when(loanService.cancelLoanService(cancelrequest1)).thenReturn(cancelresponse1);
+		Map<String,String> actualresponse=loanService.cancelLoanService(cancelrequest1);
+		
+		assertEquals(cancelresponse1, actualresponse);
+	}
+	
+	
+	
 }
