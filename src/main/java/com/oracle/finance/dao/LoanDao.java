@@ -34,4 +34,5 @@ public interface LoanDao {
 	public LoanApplication applyLoan2(MultipartFile file, String clerk_id, String customerid, String customerid2, int loantype,
 			int applicationstatus, int loantenure, float roi, float requestedamount);
 	public LoanapplicationDocument searchLoanApplicationByNumber2(String loan_application_number);
+	public Map<String, String> getUserEmail(String loan_application_number);
 }

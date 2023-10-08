@@ -84,6 +84,10 @@ public ApproveLoanResponse approveLoan(ApproveLoanRequest approveLoanRequest) {
 	int ApprovalCode = approveLoanRequest.getApprovalCode()	;
 	ApproveLoanResponse approveLoanResponse = new ApproveLoanResponse()	;
 	approveLoanResponse.setApprovalCode(ApprovalCode);
+	Map<String,String> res= loanDao.getUserEmail(approveLoanRequest.getLoan_application_number());
+	approveLoanResponse.setEmail(res.get("email"));
+	approveLoanResponse.setCustomername(res.get("customername"));
+	approveLoanResponse.setLoanaplicationnumber(approveLoanRequest.getLoan_application_number());
 	if(approveLoanRequest.getRole() == 0) {
 		if(ApprovalCode == 1) {
 			LoanAccount loanAccount = new LoanAccount();

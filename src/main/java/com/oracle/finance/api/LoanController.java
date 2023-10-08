@@ -46,6 +46,7 @@ public class LoanController {
 	@Autowired
 	DBConnection dbConnection;
 	
+	
 	@RequestMapping("/test")
 	public String testApi() {
 		return "test successful";
@@ -65,6 +66,7 @@ public class LoanController {
 	public List<LoanApplication> searchApplicationByDate(@PathVariable String start_date, @PathVariable String end_date){
 		return loanService.searchLoanApplicationByDateService(start_date,end_date);
 	}
+	
 	
 	@GetMapping("/loanApplication/number/{loan_application_number}")
 	public LoanApplication searchApplicationByNumber(@PathVariable String loan_application_number){
@@ -137,6 +139,7 @@ public class LoanController {
 			return loanService.searchLoanApplicationByNumberService2(loan_application_number);
 		}
 			
+		
 			
 		
 	

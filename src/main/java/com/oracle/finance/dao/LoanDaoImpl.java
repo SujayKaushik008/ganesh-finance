@@ -742,6 +742,35 @@ public class LoanDaoImpl implements LoanDao{
 		
 	}
 
+	@Override
+	public Map<String, String> getUserEmail(String loan_application_number) {
+		Map<String,String> res= new HashMap<>();
+		Connection con= dbConnection.connect();
+		String sql="select customer_first_name,email from customer join loan_application on loan_application_number=?";
+		try {
+			PreparedStatement ps= con.prepareStatement(sql);
+			ps.setString(1,loan_application_number);
+			ResultSet rs= ps.executeQuery();
+			if(rs.next())
+			{
+				res.put("customername", rs.getString("customer_first_name"));
+				res.put("email", rs.getString("email"));
+				System.out.println(res);
+			}
+		} catch (SQLException e) {
+			
+			e.printStackTrace();
+		}
+		finally {
+			try {
+				con.close();
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+		}
+		return res;
+	}
+
 
 
 }
