@@ -624,15 +624,22 @@ public class LoanDaoImpl implements LoanDao{
 			int applicationstatus, int loantenure, float roi, float requestedamount) {
 		Connection con=	dbConnection.connect();
 		try {
-
-
+			System.out.println("we are here");
+			if(clerk_id == null) {
+				System.out.println("clerk null");
+			}
+			System.out.println(clerk_id);
+			System.out.println(customerid);
+			System.out.println(loantype);
 			String application_number=UUID.randomUUID().toString();	
 
 			Date application_date = new Date(System.currentTimeMillis());
 			String query="INSERT INTO LOAN_APPLICATION VALUES(?,?,?,?,?,?,?,?,?)";
 			PreparedStatement ps = con.prepareStatement(query);
 			ps.setString(1,application_number);
-			ps.setString(2,clerk_id);
+			if(clerk_id.equals("null"))
+			ps.setString(2,null);
+			else ps.setString(2,clerk_id);
 			ps.setInt(3,loantype);
 			ps.setString(4,customerid);
 			ps.setFloat(5, requestedamount);
@@ -701,14 +708,16 @@ public class LoanDaoImpl implements LoanDao{
 				PreparedStatement pstmt2 = con.prepareStatement(sql);
 				pstmt2.setString(1, loan_application_number);
 				ResultSet rs1 = pstmt2.executeQuery();
-				rs1.next();
+//				rs1.next(); 
+				if(rs1.next()) {
+					loanApplication.setFileName(rs1.getString(4));
+					loanApplication.setContentType("text/plain");
+					loanApplication.setFileBytes(rs1.getBytes(3));
+					System.out.println(rs1.getBytes(3));
+					
+				}
 				
 				
-				
-				loanApplication.setFileName(rs1.getString(4));
-				loanApplication.setContentType("text/plain");
-				loanApplication.setFileBytes(rs1.getBytes(3));
-				System.out.println(rs1.getBytes(3));
 
 			}
 			else {

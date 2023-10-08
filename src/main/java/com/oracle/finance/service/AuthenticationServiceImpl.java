@@ -26,4 +26,6 @@ public class AuthenticationServiceImpl implements AuthenticationService{
 		return authenticationdao.getCustomerIdByUserName(cust_user_name);
 	}
 
+
+
 }
