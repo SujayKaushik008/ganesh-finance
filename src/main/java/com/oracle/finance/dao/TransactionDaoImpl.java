@@ -33,9 +33,10 @@ public class TransactionDaoImpl implements TransactionDao{
 			ps.setString(1,transaction.getTransaction_id());
 			ps.setFloat(2,transaction.getTransaction_amount());
 			ps.setString(3,transaction.getLoan_account_number());
-			ps.setDate(1,transaction.getDate_of_transaction());
+			ps.setDate(4,transaction.getDate_of_transaction());
 
 			int res=ps.executeUpdate();
+			System.out.println(res + " rows are inserted");
 
 		} catch (Exception e) {
 			System.out.println(e);
@@ -58,13 +59,17 @@ public class TransactionDaoImpl implements TransactionDao{
 		try {
 			String query="UPDATE LOAN_BALANCE SET INTEREST_PAID = ? , OUTSTANDING_BALANCE = ? , TENURE_REMAINING = ? , PRINCIPLE_PAID = ? , OVERDUE = ? WHERE LOAN_ACCOUNT_NUMBER = ?";
 			PreparedStatement ps = con.prepareStatement(query);
-			ps.setFloat(1,loanBalance.getInterest_paid());
-			ps.setFloat(2,loanBalance.getOutstanding_balance());
+			System.out.println((float)Math.round(loanBalance.getInterest_paid() * 100.0) / 100.0);
+			ps.setFloat(1,(float)Math.floor(loanBalance.getInterest_paid() * 100) / 100);
+			ps.setFloat(2,(float)Math.floor(loanBalance.getOutstanding_balance() * 100) / 100);
 			ps.setInt(3,loanBalance.getTenure_remaining());
-			ps.setFloat(1,loanBalance.getPriciple_paid());
-			ps.setInt(1,loanBalance.getOverdue());
+			ps.setFloat(4,(float)Math.floor(loanBalance.getPriciple_paid() * 100) / 100);
+			ps.setInt(5,loanBalance.getOverdue());
+			ps.setString(6,loanBalance.getLoan_account_number());
+			System.out.println(loanBalance.getInterest_paid() + " " + loanBalance.getOutstanding_balance() + " " +  loanBalance.getTenure_remaining() + " " +  loanBalance.getOverdue() + " " +  loanBalance.getPriciple_paid() + " " + loanBalance.getLoan_account_number());
 
 			int res=ps.executeUpdate();
+			System.out.println(res + " loan Balance updated");
 
 		} catch (Exception e) {
 			System.out.println(e);
@@ -106,10 +111,10 @@ public class TransactionDaoImpl implements TransactionDao{
 		Connection con = dbConnection.connect();
 		List<LoanAccountBalance> result = new ArrayList<>();
 		try {
-			String sql = "select * from loan_account join loan_balance on (loan_account.loan_account_number = loan_balance.loan_account_number) where loan_account.loan_status =0";
+			String sql = "select * from loan_account join loan_balance on (loan_account.loan_account_number = loan_balance.loan_account_number) where loan_account.loan_status =1";
 			PreparedStatement pstmt = con.prepareStatement(sql);
 			ResultSet rs = pstmt.executeQuery();
-			if(rs.next()) {
+			while(rs.next()) {
 				LoanAccountBalance loanAccountBalance = new LoanAccountBalance();
 				loanAccountBalance.setLoan_account_number(rs.getString(1));
 				loanAccountBalance.setApproval_date(rs.getDate(6));
@@ -128,9 +133,8 @@ public class TransactionDaoImpl implements TransactionDao{
 				loanAccountBalance.setTenure_remaining(rs.getInt(16));
 				loanAccountBalance.setPriciple_paid(rs.getFloat(17));
 				loanAccountBalance.setOverdue(rs.getInt(18));
+				result.add(loanAccountBalance);
 
-			}else {
-				throw new ApplicationException("No account found");
 			}
 		} catch (SQLException e) {
 			e.printStackTrace();

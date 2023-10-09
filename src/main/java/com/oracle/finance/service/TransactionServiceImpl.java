@@ -22,7 +22,8 @@ public class TransactionServiceImpl implements TransactionService{
 	@Override
 	public void payEmi() {
 		List<LoanAccountBalance> loanAccountBalances = transactionDao.getAllActiveLoans();
-		
+		System.out.println("in the payEmi");
+		System.out.println(loanAccountBalances.size());
 		for(LoanAccountBalance loanAccountBalance : loanAccountBalances) {
 
 //			creating transaction
@@ -34,11 +35,19 @@ public class TransactionServiceImpl implements TransactionService{
 			transaction.setTransaction_amount(loanAccountBalance.getEmi());
 			
 //			inserting transaction into table
+			System.out.println("ready to insert");
 			transactionDao.insertIntoTransactionTable(transaction);
 			
 //			calculating interest and principle component of emi
-			float interest_component = (loanAccountBalance.getOutstanding_balance() * loanAccountBalance.getEmi())/12;
+			System.out.println("here we go");
+			float interest_component = ((loanAccountBalance.getOutstanding_balance() * loanAccountBalance.getRoi())/12f)/100f;
+			System.out.println(loanAccountBalance.getEmi());
+			
 			float principle_componenet = loanAccountBalance.getEmi() - interest_component;
+			
+			System.out.println((float)Math.round(interest_component));
+			System.out.println((float)Math.round(principle_componenet));
+			
 			
 //			updating Loan Balance
 			LoanBalance loanBalance = new LoanBalance();

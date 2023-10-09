@@ -13,7 +13,8 @@ public class EmiScheduler {
 	TransactionService transactionService;
 	
 	@Scheduled(cron = "00 00 10 03 * *")
-	public void payEMI() {
+	public void payEMI() { 
+		System.out.println("paying"); 
 		transactionService.payEmi();
 	}
 
